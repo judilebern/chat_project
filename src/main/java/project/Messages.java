@@ -18,7 +18,10 @@ public class Messages {
     @ManyToOne
     @JoinColumn(name="userId", nullable=false)
     private ChatUser chatUserId;
+
     private String messageText;
+
     private Timestamp messageCreatedOn;
+
     private Timestamp messageUpdatedOn;
 }
