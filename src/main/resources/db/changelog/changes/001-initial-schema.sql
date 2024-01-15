@@ -5,7 +5,7 @@ CREATE TABLE chat_user (
   user_id VARCHAR(36) PRIMARY KEY,
   username VARCHAR(225),
   is_active BOOLEAN,
-  is_admin BOOLEAN,
+  is_admin BOOLEAN DEFAULT false,
   user_created_on TIMESTAMP,
   user_deleted_on TIMESTAMP
 );
