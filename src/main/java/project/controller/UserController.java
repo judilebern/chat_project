@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import project.Car;
 import project.MessageRepository;
+import project.Messages;
 import project.UserRepository;
 import project.requests.CreateMessageRequest;
 
 import java.sql.Timestamp;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -23,21 +25,17 @@ public class UserController {
     @Autowired
     private MessageRepository messageRepository;
 
-    @GetMapping(value = "/message/{id}")
-    public String getMessage(@PathVariable("id") UUID id) {
-        return userRepository.findUserById(id);
+    //gaunamos visos žinutės
+    @GetMapping(value = "/message")
+    public List<Messages> getMessage() {
+        return messageRepository.getAllMessages();
     }
 
-
-//    @PostMapping(value = "/message/{userId}")
-//    public String createMessage(@PathVariable("userId") UUID userId, @RequestParam String message) {
-//        messageRepository.createNewMessage(UUID.randomUUID(), userId, message, LocalDateTime.now());
-//        return "DONE";
-//    }
-
+    //sukuriama nauja žinutė
+    //todo kai useris neegzistuoja nemest sql error. DO SOME CUSTOM WORK
     @PostMapping(value = "/message/{userId}")
     public String createMessage(@RequestBody CreateMessageRequest request) {
         messageRepository.createNewMessage(UUID.randomUUID(), request.getUserId(), request.getMessage(), LocalDateTime.now());
-        return "DONE";
+        return "Success";
     }
 }

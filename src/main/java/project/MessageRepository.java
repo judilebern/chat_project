@@ -9,10 +9,14 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface MessageRepository extends JpaRepository<Messages, Long> {
+
+    @Query("SELECT m FROM Messages m ORDER BY m.messageCreatedOn DESC")
+    public List<Messages> getAllMessages();
 
     @Modifying
     @Transactional
