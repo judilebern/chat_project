@@ -3,6 +3,7 @@
 -- changeset liquibase:2
 INSERT INTO chat_user
 VALUES
+('0b97b1e4-db82-4739-8112-42fe01bc3544', 'ANONYMOUS', true, true, '2023-12-31 00:00:00.000', null),
 ('b8fa450a-61b0-493c-918c-3a96ba87aa06', 'ADMIN', true, true, '2023-12-31 00:00:00.000', null),
 ('d0ca0df5-5eb7-4079-9579-8844f1d43c8e', 'USERISTEST', true, false, '2023-12-31 00:00:00.000', null),
 ('f9f17eed-c308-4e03-9ed5-d9268bb1afd8', 'TESTTEST', true, false, '2023-12-31 00:00:00.000', null);

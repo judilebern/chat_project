@@ -38,7 +38,7 @@ public class AdminController {
 
     @PostMapping("/newUser")
     public String createNewUser(@RequestBody CreateNewUserRequest request) {
-        userRepository.createNewUser(UUID.randomUUID(), request.getUsername(), request.getIsActive(), request.getIsAdmin(), LocalDateTime.now());
+        userRepository.createNewUser(UUID.randomUUID(), request.getUsername().toUpperCase(), request.getIsActive(), request.getIsAdmin(), LocalDateTime.now());
         return "Success";
     }
 }
