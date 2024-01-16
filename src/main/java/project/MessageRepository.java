@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -29,49 +28,18 @@ public interface MessageRepository extends JpaRepository<Messages, Long> {
     @Query(value = "UPDATE Messages SET user_id = '0b97b1e4-db82-4739-8112-42fe01bc3544', message_updated_on = :messageUpdatedOn WHERE user_id = :chatUserId", nativeQuery = true)
     public void updateMessageUserToAnonymous(@Param("chatUserId") UUID chatUserId, @Param("messageUpdatedOn") LocalDateTime messageUpdatedOn);
 
-//    @Query("""
-//            SELECT
-//                ms.chatUserId.userId,
-//                COUNT(ms.messageId) as message_count,
-//                MIN(ms.messageCreatedOn) as first_message,
-//                MAX(ms.messageCreatedOn) as last_message,
-//                AVG(LENGTH(ms.messageText)) as avg_message_length
-//            FROM Messages ms
-//            WHERE ms.chatUserId.userId = :chatUserId
-//            GROUP BY ms.chatUserId.userId
-//            """)
-//    @Query("""
-//            SELECT
-//              new project.Statistics(ms.messageText,
-//                ms.messageCreatedOn)
-//            FROM Messages ms
-//            WHERE ms.chatUserId.userId = :chatUserId
-//            """)
-
-    //TODO do this exactly like here just with correct select
 @Query("""
             SELECT
-                ms.messageText as messageText,
-                ms.messageCreatedOn as messageCreatedOn,
-                cu.username as username
-            FROM Messages ms
-            LEFT JOIN ChatUser cu ON cu.userId = ms.chatUserId.userId
-            WHERE ms.chatUserId.userId = :chatUserId
+                cu.username as username,
+                COUNT(ms.messageId) as messageCount,
+                MIN(ms.messageCreatedOn) as firstMessageDate,
+                MAX(ms.messageCreatedOn) as lastMessageDate,
+                AVG(LENGTH(ms.messageText)) as avgMessageLength,
+                (SELECT ms2.messageText FROM Messages ms2 WHERE ms2.chatUserId.userId = cu.userId ORDER BY  ms2.messageCreatedOn desc LIMIT 1) as lastMessageText
+                FROM ChatUser cu
+                LEFT JOIN Messages ms ON ms.chatUserId.userId = cu.userId
+                GROUP BY cu.userId, cu.username
             """)
-    public List<TEST> getStatistics(@Param("chatUserId") UUID chatUserId);
-
-
-/*
-    SELECT
-    cu.username,
-    COUNT(ms.message_id) as message_count,
-    MIN(ms.message_created_on) as first_message,
-    MAX(ms.message_created_on) as last_message,
-    AVG(LENGTH(ms.message_text)) as AVG_message_length,
-    (SELECT ms2.message_text FROM messages ms2 WHERE ms2.user_id = cu.user_id ORDER BY  ms2.message_created_on desc LIMIT 1) as last_message_text
-    FROM chat_user cu
-    LEFT JOIN messages ms ON ms.user_id = cu.user_id
-    GROUP BY cu.user_id, cu.username;
-*/
+    public List<Statistics> getStatistics();
 
 }

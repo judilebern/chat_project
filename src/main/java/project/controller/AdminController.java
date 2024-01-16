@@ -18,23 +18,6 @@ public class AdminController {
     @Autowired
     private MessageRepository messageRepository;
 
-//    @GetMapping("/user/{id}")
-//    public String getUser(@PathVariable("id") String id){
-//        return id;
-//    }
-//
-//    @GetMapping("/user")
-//    public String getSomething(@RequestParam String anotherId){
-//        return anotherId;
-//    }
-//
-//    //get metodas niekada neturi RequestBody
-//    //post filtravimui
-//    @PostMapping("/user")
-//    public String getSomething2(@RequestBody User user){
-//        return user.getId();
-//    }3
-
     @PostMapping("/newUser")
     public String createNewUser(@RequestBody CreateNewUserRequest request) {
         userRepository.createNewUser(UUID.randomUUID(), request.getUsername().toUpperCase(), request.getIsActive(), request.getIsAdmin(), LocalDateTime.now());
@@ -48,9 +31,8 @@ public class AdminController {
         return "Success";
     }
 
-    //todo PATAISYTI
     @GetMapping("/statistics")
-    public List<TEST> getStatistics(@RequestParam UUID userID) {
-        return messageRepository.getStatistics(userID);
+    public List<Statistics> getStatistics() {
+        return messageRepository.getStatistics();
     }
 }
