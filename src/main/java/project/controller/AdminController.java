@@ -2,12 +2,11 @@ package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import project.MessageRepository;
-import project.User;
-import project.UserRepository;
+import project.*;
 import project.requests.CreateNewUserRequest;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -40,5 +39,18 @@ public class AdminController {
     public String createNewUser(@RequestBody CreateNewUserRequest request) {
         userRepository.createNewUser(UUID.randomUUID(), request.getUsername().toUpperCase(), request.getIsActive(), request.getIsAdmin(), LocalDateTime.now());
         return "Success";
+    }
+
+    @PostMapping("/deleteUser")
+    public String deleteExistingUser(@RequestParam UUID userID) {
+        messageRepository.updateMessageUserToAnonymous(userID, LocalDateTime.now());
+        userRepository.deleteExistingUser(userID);
+        return "Success";
+    }
+
+    //todo PATAISYTI
+    @GetMapping("/statistics")
+    public List<TEST> getStatistics(@RequestParam UUID userID) {
+        return messageRepository.getStatistics(userID);
     }
 }
