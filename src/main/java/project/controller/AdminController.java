@@ -33,10 +33,17 @@ public class AdminController {
     }
 
     @PostMapping("/deleteUser")
-    public String deleteExistingUser(@RequestParam UUID userID) {
+    public HttpStatus deleteExistingUser(@RequestParam UUID userID) {
+        if (userRepository.findUserById(userID) == null) {
+            throw new ApplicationException(
+                    "user-not-found",
+                    String.format("User with id=%s not found", userID),
+                    HttpStatus.NOT_FOUND
+            );
+        }
         messageRepository.updateMessageUserToAnonymous(userID, LocalDateTime.now());
         userRepository.deleteExistingUser(userID);
-        return "Success";
+        return HttpStatus.OK;
     }
 
     @GetMapping("/statistics")
