@@ -21,7 +21,7 @@ public class UserController {
 
     //gaunamos visos žinutės
     @GetMapping(value = "/message")
-    public List<Messages> getMessage() {
+    public List<MessagesUserResponse> getMessage() {
         return messageRepository.getAllMessages();
     }
 

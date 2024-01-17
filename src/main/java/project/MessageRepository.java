@@ -14,8 +14,16 @@ import java.util.UUID;
 @Repository
 public interface MessageRepository extends JpaRepository<Messages, Long> {
 
-    @Query("SELECT m FROM Messages m ORDER BY m.messageCreatedOn DESC")
-    public List<Messages> getAllMessages();
+    @Query("""
+                SELECT
+                    cu.username as username,
+                    m.messageText as messageText,
+                    m.messageCreatedOn as messageCreatedOn
+                FROM Messages m
+                LEFT JOIN ChatUser cu ON cu.userId = m.chatUserId.userId 
+                ORDER BY m.messageCreatedOn DESC
+           """)
+    public List<MessagesUserResponse> getAllMessages();
 
     @Modifying
     @Transactional
