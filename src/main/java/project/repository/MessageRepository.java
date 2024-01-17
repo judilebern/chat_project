@@ -1,4 +1,4 @@
-package project;
+package project.repository;
 
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import project.entities.Messages;
+import project.entities.MessagesUserResponse;
+import project.entities.Statistics;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,28 +18,28 @@ import java.util.UUID;
 public interface MessageRepository extends JpaRepository<Messages, Long> {
 
     @Query("""
-                SELECT
-                    cu.username as username,
-                    m.messageText as messageText,
-                    m.messageCreatedOn as messageCreatedOn
-                FROM Messages m
-                LEFT JOIN ChatUser cu ON cu.userId = m.chatUserId.userId 
-                ORDER BY m.messageCreatedOn DESC
-           """)
+                 SELECT
+                     cu.username as username,
+                     m.messageText as messageText,
+                     m.messageCreatedOn as messageCreatedOn
+                 FROM Messages m
+                 LEFT JOIN ChatUser cu ON cu.userId = m.chatUserId.userId
+                 ORDER BY m.messageCreatedOn DESC
+            """)
     public List<MessagesUserResponse> getAllMessages();
 
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO Messages (message_id, user_id, message_text, message_created_on) VALUES (:messageId, :chatUserId, :messageText, :messageCreatedOn) ", nativeQuery = true)
-    public void createNewMessage(@Param("messageId") UUID messageId, @Param("chatUserId") UUID chatUserId,
+    void createNewMessage(@Param("messageId") UUID messageId, @Param("chatUserId") UUID chatUserId,
                                  @Param("messageText") String messageText, @Param("messageCreatedOn") LocalDateTime messageCreatedOn);
 
     @Modifying
     @Transactional
     @Query(value = "UPDATE Messages SET user_id = '0b97b1e4-db82-4739-8112-42fe01bc3544', message_updated_on = :messageUpdatedOn WHERE user_id = :chatUserId", nativeQuery = true)
-    public void updateMessageUserToAnonymous(@Param("chatUserId") UUID chatUserId, @Param("messageUpdatedOn") LocalDateTime messageUpdatedOn);
+    void updateMessageUserToAnonymous(@Param("chatUserId") UUID chatUserId, @Param("messageUpdatedOn") LocalDateTime messageUpdatedOn);
 
-@Query("""
+    @Query("""
             SELECT
                 cu.username as username,
                 COUNT(ms.messageId) as messageCount,
@@ -48,6 +51,6 @@ public interface MessageRepository extends JpaRepository<Messages, Long> {
                 LEFT JOIN Messages ms ON ms.chatUserId.userId = cu.userId
                 GROUP BY cu.userId, cu.username
             """)
-    public List<Statistics> getStatistics();
+    List<Statistics> getStatistics();
 
 }

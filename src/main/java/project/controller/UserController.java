@@ -3,7 +3,10 @@ package project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.*;
+import project.ApplicationException;
+import project.entities.MessagesUserResponse;
+import project.repository.MessageRepository;
+import project.repository.UserRepository;
 import project.requests.CreateMessageRequest;
 
 import java.time.LocalDateTime;
@@ -19,7 +22,6 @@ public class UserController {
     @Autowired
     private MessageRepository messageRepository;
 
-    //gaunamos visos žinutės
     @GetMapping(value = "/message")
     public List<MessagesUserResponse> getMessage() {
         return messageRepository.getAllMessages();

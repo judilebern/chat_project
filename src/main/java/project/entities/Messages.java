@@ -1,4 +1,4 @@
-package project;
+package project.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,7 +16,7 @@ public class Messages {
     @Id
     private UUID messageId;
     @ManyToOne
-    @JoinColumn(name="userId", nullable=false)
+    @JoinColumn(name = "userId", nullable = false)
     private ChatUser chatUserId;
 
     private String messageText;

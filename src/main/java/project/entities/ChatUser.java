@@ -1,9 +1,10 @@
-package project;
+package project.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.type.NumericBooleanConverter;
 
 import java.sql.Timestamp;
 import java.util.UUID;

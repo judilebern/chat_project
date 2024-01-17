@@ -3,7 +3,10 @@ package project.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.*;
+import project.ApplicationException;
+import project.entities.Statistics;
+import project.repository.MessageRepository;
+import project.repository.UserRepository;
 import project.requests.CreateNewUserRequest;
 
 import java.time.LocalDateTime;
