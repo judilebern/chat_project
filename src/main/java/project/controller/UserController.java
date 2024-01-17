@@ -1,17 +1,11 @@
 package project.controller;
 
-import jakarta.transaction.Transaction;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import project.Car;
-import project.MessageRepository;
-import project.Messages;
-import project.UserRepository;
+import project.*;
 import project.requests.CreateMessageRequest;
 
-import java.sql.Timestamp;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -31,11 +25,17 @@ public class UserController {
         return messageRepository.getAllMessages();
     }
 
-    //sukuriama nauja žinutė
-    //todo kai useris neegzistuoja nemest sql error. DO SOME CUSTOM WORK
+
     @PostMapping(value = "/message/{userId}")
-    public String createMessage(@RequestBody CreateMessageRequest request) {
+    public HttpStatus createMessage(@RequestBody CreateMessageRequest request) {
+        if (userRepository.findUserById(request.getUserId()) == null) {
+            throw new ApplicationException(
+                    "user-not-found",
+                    String.format("User with id=%s not found", request.getUserId()),
+                    HttpStatus.NOT_FOUND
+            );
+        }
         messageRepository.createNewMessage(UUID.randomUUID(), request.getUserId(), request.getMessage(), LocalDateTime.now());
-        return "Success";
+        return HttpStatus.OK;
     }
 }
