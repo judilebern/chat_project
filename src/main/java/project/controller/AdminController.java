@@ -19,7 +19,7 @@ public class AdminController {
     @Autowired
     private MessageRepository messageRepository;
 
-    @PostMapping("/newUser")
+    @PostMapping("/user")
     public HttpStatus createNewUser(@RequestBody CreateNewUserRequest request) {
         if (userRepository.findUserByUsername(request.getUsername().toUpperCase()) != null) {
             throw new ApplicationException(
@@ -32,7 +32,7 @@ public class AdminController {
         return HttpStatus.OK;
     }
 
-    @PostMapping("/deleteUser")
+    @DeleteMapping("/user")
     public HttpStatus deleteExistingUser(@RequestParam UUID userID) {
         if (userRepository.findUserById(userID) == null) {
             throw new ApplicationException(

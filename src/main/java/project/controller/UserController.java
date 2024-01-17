@@ -26,7 +26,7 @@ public class UserController {
     }
 
 
-    @PostMapping(value = "/message/{userId}")
+    @PostMapping(value = "/message")
     public HttpStatus createMessage(@RequestBody CreateMessageRequest request) {
         if (userRepository.findUserById(request.getUserId()) == null) {
             throw new ApplicationException(
