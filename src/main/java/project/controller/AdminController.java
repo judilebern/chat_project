@@ -1,6 +1,7 @@
 package project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import project.*;
 import project.requests.CreateNewUserRequest;
@@ -19,9 +20,16 @@ public class AdminController {
     private MessageRepository messageRepository;
 
     @PostMapping("/newUser")
-    public String createNewUser(@RequestBody CreateNewUserRequest request) {
+    public HttpStatus createNewUser(@RequestBody CreateNewUserRequest request) {
+        if (userRepository.findUserByUsername(request.getUsername().toUpperCase()) != null) {
+            throw new ApplicationException(
+                    "user-exists",
+                    String.format("User with username=%s is already exists", request.getUsername()),
+                    HttpStatus.CONFLICT
+            );
+        }
         userRepository.createNewUser(UUID.randomUUID(), request.getUsername().toUpperCase(), request.getIsActive(), request.getIsAdmin(), LocalDateTime.now());
-        return "Success";
+        return HttpStatus.OK;
     }
 
     @PostMapping("/deleteUser")

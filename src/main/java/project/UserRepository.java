@@ -17,6 +17,9 @@ public interface UserRepository extends JpaRepository<ChatUser, Long> {
     @Query("SELECT u.username FROM ChatUser u WHERE u.userId = :uuid")
     String findUserById(@Param("uuid") UUID uuid);
 
+    @Query("SELECT u.username FROM ChatUser u WHERE u.username = :username")
+    String findUserByUsername(@Param("username") String username);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO chat_user (user_id, username, is_active, is_admin, user_created_on) VALUES (:user_id, :username, :is_active, :is_admin, :user_created_on) ", nativeQuery = true)
