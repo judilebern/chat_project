@@ -32,6 +32,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.1")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    implementation("io.springfox:springfox-swagger2:2.4.0")
+    implementation("io.springfox:springfox-swagger-ui:2.4.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2")
 }
 
 tasks.withType<Test> {
