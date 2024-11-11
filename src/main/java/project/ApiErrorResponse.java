@@ -14,4 +14,7 @@ public class ApiErrorResponse {
     private final String path;
     private final String method;
     private final LocalDateTime timestamp;
+
+    //comment
+    private final String something;
 }
